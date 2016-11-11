@@ -12,11 +12,11 @@ classes ci-dessous.
 
 ```java
 public void post(String msg){
-   if (msg.length > 140){
+   if (msg.length() > 140){
        msg = shortener.shorten(msg);
    }
 
-   if (msg.length <= 140){
+   if (msg.length() <= 140){
        tweeter.send(msg);
    }
 }
