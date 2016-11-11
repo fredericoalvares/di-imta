@@ -1,9 +1,14 @@
 # Tutoriel : Injection de dépendances 
 
+## Exemple : Messagerie *Twitter*
 
-## Exemple : Messagerie twitter
+Dans ce tutoriel nous allons nous baser sur l'exemple d'une messagerie *Twitter*. Cette application 
+est composé d'une classe client *TwitterClient* qui dépends de deux autres fonctionnalités : 
+une pour écourter le message si sa longueur dépasse 140 caractères autorisé par *Twitter*, et l'autre
+pour envoyer le message. Ces dépendances sont illustrées dans le diagramme de 
+classes ci-dessous. 
 
-![alt text](http://yuml.me/6e1b047d.svg)
+<img src="http://yuml.me/6e1b047d.svg" width="450px"/>
 
 ```java
 public void post(String msg){
@@ -17,23 +22,37 @@ public void post(String msg){
 }
 ```
 
-## Dépendances dans le constructeur
-![alt text](http://yuml.me/3d7e40fe.svg)
+## Gestion de dépendances 
 
-* Implémentez les classes indiquées dans le diagramme
+Il y a différentes moyens de gérer les dépendances dans la programmation orienté objet. L'objectif 
+de cette section est de montrer les avantages et inconvénients de quelques unes. 
+
+## Dépendances dans le constructeur
+
+
+<img src="http://yuml.me/3d7e40fe.svg" width="450px"/>
+
+
+* Implémentez les classes indiquées dans le diagramme ci-dessous
 * Implémentez une classe de teste pour tester votre implémentation  
 * Quels sont les inconvénients de l'approche par composition?
 
-![alt text](http://yuml.me/25618f3f.svg)
 
-* Changement d'implémentation -> un changement dans la classe dépendante 
-* Manque de flexibilité 
-* Par exemple : pas très pratique pour les testes ! 
+Supposons que nous voulions tester notre application avec une classe `MockTweet` à la place de 
+`SmsTweet` car envoyer des messages SMS pour effectuer des testes coûte de l'argent.
+
+
+<img src="http://yuml.me/25618f3f.svg" width="450px"/>
+
+
+Ce petit changement engendre un changement aussi dans la (les) classe (s) dépendante (s), ce qui montre le **manque de flexibilité** de cette approche. 
 
 
 ## Dépendance via des fabriques statiques
 
-![alt text](http://yuml.me/e6e738cd.svg)
+
+<img src="http://yuml.me/e6e738cd.svg" width="450px"/>
+
 
 * Implémentez les classes indiquées dans le diagramme
 * Implémentez une classe de teste pour tester votre implémentation  
@@ -41,54 +60,54 @@ public void post(String msg){
 * Quels sont les inconvénients de cette approche?
 
 
-
-![alt text](http://yuml.me/5f9d31b9.svg)
-
-* On augmente le niveau d'abstraction mais le problème de dépendance reste le même.
-* Testes. 
+Il est clair que cette approche augmente le niveau d'abstraction car on accède plus 
+directement les constructeurs des dépendances, mais le problème de dépendances demeure. La seule différence est que maintenant les classes métiers dépendent des fabriques au lieu d'autres classes métiers, ce qui peut être gênant pour les applications plus grandes, comme illustré ci-dessous. 
 
 
-# Injection de dépendances
-
-## "Don't call us, we call you!"
-
----
-
-## Injection de dépendances par agrégation
+<img src="http://yuml.me/5f9d31b9.svg" width="500px"/>
 
 
-<img src="http://yuml.me/afcafff9.svg" width="350px"/>
+## Injection de dépendances
 
-* Implémentez les classes indiquées dans le diagramme
+Au lieu de créer les dépendances (ou utiliser les fabriques) à l'intérieur des classes, mieux vaut, du point de vue de la modularité, injecter les dépendances créés auparavant.   
+
+### Injection de dépendances par agrégation
+
+* Implémentez les classes indiquées dans le diagramme ci-dessous
 * Implémentez une classe de teste pour tester votre implémentation  
 * Quels sont les avantages par rapport aux approches précédentes?
 
 
-# Injection de dépendances par agrégation + fabriques
+<img src="http://yuml.me/afcafff9.svg" width="350px"/>
 
+Par rapport aux approches précédentes, celle-ci a l'avantage d'isoler les dépendances des classes dépendantes, c'est à dire, les dépendances sont injectées par agrégation (dans cet exemple via les constructeurs). Une changement d'implémentation de la dépendance n'engendre pas un changement dans la classe dépendante (p.e. : *SmsTweet* -> *MockTweet*) tant que l'interface n'est pas modifiée. Cependant, c'est à la classe client (dans notre exemple *TwitterClient*) de créer et gérer les dépendances, ce qui peut devenir vite une tâche très laborieuse.        
 
-<img src="http://yuml.me/b7bf6870.svg" width="400px"/>
+### Injection de dépendances par agrégation + fabriques
 
 * Implémentez les classes indiquées dans le diagramme
 * Implémentez une classe de teste pour tester votre implémentation  
 * Quels sont les avantages par rapport aux approches précédentes?
 * Quels sont les inconvénients de cette approche?
 
-# Coder les fabriques ? 
+<img src="http://yuml.me/b7bf6870.svg" width="400px"/>
 
-# Injection de dépendances avec Guice
+
+Par rapport aux autres approches, cette approche a l'avantage d'isoler les dépendances
+de leur création via les fabriques. Par contre, 
+est-ce que nous avons besoin de coder manuellement toutes ces fabriques ?
+
+### Injection de dépendances avec Guice
+
+*Guice* est un *framework* Java qui facilite la mise en œuvre du patron de conception
+*injection de dépendances*. Il suffit de définir un *mapping* des interfaces (types) 
+des dépendances vers les classes implémentation pour pouvoir bénéficier d'un injecteur 
+générique. Ceci joue le rôle d'une fabrique, c'est à dire que l'injecteur s'occupe de 
+créer et injecter les dépendances. 
 
 <img src="http://yuml.me/456f0a36.svg" width="450px"/>
 
-* `Module` : mapping interfaces -> classes implémentation
-* `Injector` : joue le rôle d'une fabrique
- * Fournie par Guice 
- * .alert[on ne doit pas la coder/maintenir]  
+#### Module
 
-# Injection de dépendances avec Guice
-
-* Module
-  
 ```java
 import com.google.inject.AbstractModule;
 
@@ -100,19 +119,18 @@ public class TweetModule extends AbstractModule {
    }
 }
 ```
---
-* Injector
+
+#### Injecteur
 
 ```java
 Injector injector = Guice.createInjector(new TweetModule());
 TweetClient client = injector.getInstance(TweetClient.class);
 ```
 
----
+#### Classe dépendante
 
-# Injection de dépendances avec Guice
-
-* Classe dépendante   
+Du côté de la classe dépendante, on a également besoin de préciser quelles sont 
+les dépendances que l'on veut que soient injectées.   
 
 ```java
 import com.google.inject.Inject;
@@ -129,6 +147,12 @@ public class TweetClient {
 ```
 
 
+
+
+
+
+
+<!--
 # A retenir : injection de dépendances et Guice
 
 * Les objets viennent à vous
@@ -136,4 +160,4 @@ public class TweetClient {
   * *Inversion of control (IoC)*
 * Architecture plus modulaire / Modules réutilisables
 * Fabriques déjà implémentées par Guice 
-* Moins de code inutile (factorisation)
+* Moins de code inutile (factorisation) -->
