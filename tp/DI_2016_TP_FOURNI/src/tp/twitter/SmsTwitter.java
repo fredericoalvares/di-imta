@@ -18,7 +18,7 @@ public class SmsTwitter implements Twitter {
 	@Override
 	public boolean send(String msg) {
 		try {
-			out.append("Message sent by SmsTweeter : " + msg);
+			out.append("Message sent by SmsTweeter : " + msg + "\n");
 			transmitter.transmitDataPacket(msg.getBytes());
 			return true;
 		} catch (IOException e) {

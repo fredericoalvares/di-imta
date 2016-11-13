@@ -13,7 +13,7 @@ public class MockTwitter implements Twitter {
 	@Override
 	public boolean send(String msg) {
 		try {
-			out.append("Message send by MockTweeter : " + msg);
+			out.append("Message send by MockTweeter : " + msg +"\n");
 			return true;
 		} catch (IOException e) {
 			return false;

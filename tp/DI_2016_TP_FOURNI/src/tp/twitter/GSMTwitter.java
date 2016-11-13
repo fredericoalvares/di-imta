@@ -13,7 +13,7 @@ public class GSMTwitter implements Twitter {
 	@Override
 	public boolean send(String msg) {
 		try {
-			out.append("Message send by GSMTwitter : " + msg);
+			out.append("Message send by GSMTwitter : " + msg + "\n");
 			return true;
 		} catch (IOException e) {
 			return false;

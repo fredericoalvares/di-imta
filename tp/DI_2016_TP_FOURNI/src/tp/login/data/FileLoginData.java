@@ -14,9 +14,14 @@ public class FileLoginData implements LoginData {
 		try {
 			in = new BufferedReader(new FileReader(username));
 			String pwd = in.readLine();
-			in.close();
-			
 			ret = password.equals(pwd);
+			
+			if (!ret){
+				pwd = in.readLine();
+				ret = password.equals(pwd);
+			}
+			
+			in.close();
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getMessage());
 		} catch (IOException e) {

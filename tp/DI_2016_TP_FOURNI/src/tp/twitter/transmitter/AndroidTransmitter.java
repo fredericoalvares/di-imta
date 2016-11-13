@@ -13,11 +13,11 @@ public class AndroidTransmitter implements Transmitter {
 	@Override
 	public void transmitDataPacket(byte[] data) {
 		try {
-			out.append("iOS is transmitting " + data.length + " bytes");
+			out.append("iOS is transmitting " + data.length + " bytes\n");
 		
 			for (int i=0; i < data.length; i=i+32){
 				int end = (data.length - i > 32) ? i+32 :  data.length;
-				out.append(i + " to " + end + " bytes");
+				out.append((i+1) + " to " + end + " bytes\n");
 			}
 		} catch (IOException e) {}
 	}
