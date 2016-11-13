@@ -109,7 +109,7 @@ public class Main {
 
 ### Injection nommée
 
-Si notre application a plusieurs dépendances du même type ```MonInterface```, dans différentes classes, l'association ```bind(MonInterface.class).to(MaClasse.class);``` sera appliquée à toutes les dépendances. Pour contourner cette limite, nous pouvons nommer les dépendances et s'en servir pour associer les une classe à une dépendance spécifique : 
+Si notre application a plusieurs dépendances du même type ```MonInterface```, dans différentes classes, l'association ```bind(MonInterface.class).to(MaClasse.class);``` sera appliquée à toutes les dépendances. Pour contourner cette limite, nous pouvons nommer les dépendances et s'en servir pour associer une classe à une dépendance spécifique : 
 ```java
 public class ClassDependante {
     ...
@@ -132,7 +132,7 @@ public class Module1 extends AbstractModule {
 }
    
 ``` 
-1. Modifiez l'application pour que seules les dépendances du type ```Appendable``` des classes ```MockTwitter``` et ```AndroidTransmitter``` soient associées à ```System.err``` au lieu de ```System.out```
+1. Modifiez l'application pour que seules les dépendances du type ```Appendable``` des classes ```SmsTwitter``` et ```AndroidTransmitter``` soient associées à ```System.err``` au lieu de ```System.out```
 2. Créez une nouvelle dépendance du type ```Twitter``` dans ```TwitterClient``` de sorte que si l'appel à la méthode *send* de la première dépendance renvoie *false*, le programme re-essaye avec la deuxième. Modifiez la classe module pour que les deux dépendances soient associées à deux classes différentes.
 
 
@@ -161,4 +161,4 @@ public class Module1 extends AbstractModule {
 }
 ```
 
-1. Modifiez votre implementation pour que l'URL soit définie juste après la creation d'un objet du type ```Connection```.
+1. Modifiez votre implementation pour que l'URL (voir la méthode `Connection.setUrl`) soit définie juste après la creation d'un objet du type ```Connection```.
